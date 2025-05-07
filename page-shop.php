@@ -229,12 +229,6 @@ Description: Trang hiển thị danh sách sản phẩm kèm tìm kiếm và dan
     font-weight: bold;
 }
 .common-banner {
-    background-image: url(img/banner/banner-single-page.jpg);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-color: #071c1f;
     width: 100%;
     height: 200px;
 }
