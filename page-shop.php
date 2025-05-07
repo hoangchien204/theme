@@ -1,7 +1,7 @@
 <?php
 /*
 Template Name: Shop Page
-Description: Trang hiển thị danh sách sản phẩm kèm tìm kiếm và danh mục.
+Description: Trang hiển thị danh sách sản phẩm từ bảng wp_hanghoa kèm tìm kiếm và danh mục.
 */
 
 ?>
@@ -20,10 +20,8 @@ Description: Trang hiển thị danh sách sản phẩm kèm tìm kiếm và dan
 
 <body <?php body_class(); ?>>
     <!-- WP Header -->
-    <?php get_header();?>
-    <?php get_template_part( "Templates/common-banner" );?>
-    
-    
+    <?php get_header(); ?>
+    <?php get_template_part("Templates/common-banner"); ?>
 
     <!-- Main Shop Section -->
     <section class="shop-page">
@@ -33,22 +31,30 @@ Description: Trang hiển thị danh sách sản phẩm kèm tìm kiếm và dan
                 <div class="shop-categories">
                     <h2>Danh mục sản phẩm</h2>
                     <?php
-                    // Display product categories if WooCommerce is installed and product_cat exists
-                    if (taxonomy_exists('product_cat')) {
-                        wp_list_categories(array(
-                            'taxonomy' => 'product_cat', // WooCommerce product categories
-                            'title_li' => '',
-                            'hide_empty' => false
-                        ));
-                    }
-                    ?>
+                    // Display product categories (assuming a custom taxonomy or manual categories)
+                    // If using wp_hanghoa MaLoai, you may need a separate table for categories
+                   
+// Lấy danh sách danh mục từ bảng wp_loai
+$categories = $wpdb->get_results("SELECT MaLoai, TenLoai FROM {$wpdb->prefix}loai");
+
+if ($categories) :
+    echo '<ul>';
+    foreach ($categories as $category) :
+        $maLoai = intval($category->MaLoai);
+        $tenLoai = esc_html($category->TenLoai);
+
+        // Gắn link lọc sản phẩm theo MaLoai (dùng query string ?maloai=)
+        echo '<li><a href="' . esc_url(add_query_arg('maloai', $maLoai, get_permalink())) . '">' . $tenLoai . '</a></li>';
+    endforeach;
+    echo '</ul>';
+else :
+    echo '<p>Không có danh mục nào.</p>';
+endif;
+?>
+
                 </div>
 
-                <!-- Product Search Form -->
-                <div class="shop-search">
-                    <h2>Tìm kiếm sản phẩm</h2>
-                    <?php get_search_form(); // Default WordPress search form ?>
-                </div>
+                
             </div>
 
             <div class="shop-products">
@@ -56,39 +62,45 @@ Description: Trang hiển thị danh sách sản phẩm kèm tìm kiếm và dan
 
                 <div class="product-grid">
                     <?php
-                    // Query to get all products
-                    $args = array(
-                        'post_type' => 'product', // WooCommerce products
-                        'posts_per_page' => 12,   // Number of products to display
-                        'post_status' => 'publish'
-                    );
-                    $query = new WP_Query($args);
+                    global $wpdb;
+                    $maloai = isset($_GET['maloai']) ? intval($_GET['maloai']) : 0;
+$where_clause = $maloai > 0 ? "WHERE MaLoai = $maloai" : "";
 
-                    if ($query->have_posts()) :
-                        while ($query->have_posts()) : $query->the_post();
+$results = $wpdb->get_results("
+    SELECT MaHH, TenHH, DonGia, SoLanMua, Hinh
+    FROM {$wpdb->prefix}hanghoa
+    $where_clause
+    ORDER BY MaHH DESC
+    LIMIT 12
+");
+
+                    if ($results) :
+                        foreach ($results as $product) :
+                            $product_id = $product->MaHH;
+                            $product_name = $product->TenHH;
+                            $price = $product->DonGia;
+                            $sales = $product->SoLanMua;
+                            $image_path = $product->Hinh ? get_template_directory_uri() . '/img/' . $product->Hinh : '';
                             ?>
                             <div class="product-item">
-                                <a href="<?php the_permalink(); ?>">
-                                    <?php if (has_post_thumbnail()) : ?>
+                                <a href="<?php echo esc_url(home_url('/chi-tiet-san-pham/?id=' . $product_id)); ?>">
+                                    <?php if ($image_path) : ?>
                                         <div class="product-thumbnail">
-                                            <?php the_post_thumbnail('medium'); ?>
+                                            <img src="<?php echo esc_url($image_path); ?>" alt="<?php echo esc_attr($product_name); ?>">
                                         </div>
                                     <?php endif; ?>
                                     <div class="product-info">
-                                        <h3 class="product-title"><?php the_title(); ?></h3>
-                                        <p class="product-price">
-                                            <?php echo wc_price(get_post_meta(get_the_ID(), '_price', true)); // WooCommerce price ?>
-                                        </p>
+                                        <h3 class="product-title"><?php echo esc_html($product_name); ?></h3>
+                                        <p class="product-price"><?php echo number_format($price, 0, ',', '.') . ' VND'; ?></p>
+                                        <p class="product-sales">Đã bán: <?php echo $sales ? esc_html($sales) : 0; ?></p>
                                     </div>
                                 </a>
                             </div>
                             <?php
-                        endwhile;
+                        endforeach;
                     else :
                         echo '<p>Không có sản phẩm nào.</p>';
                     endif;
-
-                    wp_reset_postdata();
                     ?>
                 </div>
             </div>
@@ -228,21 +240,19 @@ Description: Trang hiển thị danh sách sản phẩm kèm tìm kiếm và dan
     color: #0073e6;
     font-weight: bold;
 }
+
+.product-sales {
+    font-size: 14px;
+    color: #555;
+}
+
 .common-banner {
-    background-image: url(img/banner/banner-single-page.jpg);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-color: #071c1f;
     width: 100%;
     height: 200px;
 }
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
- 
-
     .shop-sidebar {
         width: 100%;
         margin-bottom: 20px;
@@ -262,5 +272,4 @@ Description: Trang hiển thị danh sách sản phẩm kèm tìm kiếm và dan
         grid-template-columns: 1fr;
     }
 }
-
 </style>
