@@ -1,0 +1,14 @@
+.log-in-button:focus {
+  outline: none;
+}
+.log-in-button {
+  border: none;
+  outline: none;
+  background-color: var(--main-clr);
+  transition: 0.3s all ease;
+}
+.log-in-button:hover {
+  background-color: var(--shadow-clr);
+  color: black !important;
+  cursor: pointer;
+}

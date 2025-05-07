@@ -1,0 +1,132 @@
+.fruity-header {
+  background-color: var(--bg-clr2);
+}
+.menu {
+  list-style-type: none;
+  position: relative;
+}
+.menu-item {
+  float: left;
+  padding: 5px 25px;
+  font-weight: bold;
+}
+.menu-item:hover .sub-menu {
+  top: 35px;
+  opacity: 1;
+  z-index: 999;
+}
+.custom-menu.my-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.menu-item > a {
+  text-decoration: none;
+  color: var(--black-clr);
+  transition: 0.2s all ease-in-out;
+}
+.menu-item > a:hover {
+  text-decoration: none;
+  color: var(--main-clr);
+}
+.sub-menu {
+  background-color: var(--white-clr);
+  border-top: 4px solid var(--main-clr);
+  list-style-type: none;
+  padding: 0;
+  z-index: 0;
+  position: absolute;
+  top: 150px;
+  opacity: 0;
+  transition: 0.3s;
+}
+.sub-menu > li > ul {
+  margin-left: 150px;
+  display: none;
+}
+.sub-menu > li:hover > ul {
+  display: block;
+  z-index: 999;
+}
+.sub-menu > li {
+  float: none;
+  width: 180px;
+}
+.menu-humberger {
+  display: none !important;
+}
+.menu-wrap .nav-menu {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-wrap .nav-menu li {
+  margin-right: 20px;
+}
+
+.menu-wrap .nav-menu li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 16px;
+}
+
+.menu-wrap .nav-menu li a:hover {
+  color: #f00; /* Màu khi hover */
+}
+
+
+.main-menu ul{
+  display: flex;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .menu-humberger {
+    display: block !important;
+    transition: 0.3s all ease-in-out;
+  }
+  .menu-item {
+    float: none;
+    padding: 5px 25px;
+    font-weight: bold;
+  }
+  .menu {
+    margin-top: 15px !important;
+    padding-top: 15px;
+    background-color: var(--white-clr);
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    z-index: 1;
+    transition: 0.3s all ease-in-out;
+    transform: translateX(-300px);
+  }
+  .show {
+    transform: translateX(-15px);
+  }
+  .sub-menu {
+    background-color: var(--white-clr);
+    border-top: 0px solid var(--main-clr);
+    padding: 0;
+    z-index: 1;
+    position: static;
+    top: 0px;
+    opacity: 1;
+    transition: 0.3s;
+  }
+  .sub-menu > li > ul {
+    margin-left: 10px;
+    opacity: 1;
+    display: block;
+  }
+  .sub-menu > li:hover > ul {
+    z-index: 1;
+  }
+}

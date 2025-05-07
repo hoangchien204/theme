@@ -1,0 +1,23 @@
+.category-item{
+    border: 1px solid #ddd;
+    box-shadow: 1px 1px 3px 0px #dddd;
+}
+.category-item:hover .hover-border{
+    width: 100%;
+    background-color: var(--main-clr);
+}
+.category-item:hover .category-item-link{
+    color: var(--main-clr);
+}
+.hover-border{
+    width: 0%;
+    height: 4px;
+    background-color: var(--gray-clr);
+    transition: 0.5s all ease-in-out;
+}
+.category-item-link{
+    color: var(--black-clr);
+}
+.category-item-link:hover{
+    text-decoration: none;
+}

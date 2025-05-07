@@ -1,0 +1,149 @@
+/* General Layout for the Shop Page */
+.shop-page {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.shop-sidebar {
+    width: 25%;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.shop-categories {
+    margin-bottom: 30px;
+}
+
+.shop-categories h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.shop-categories ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.shop-categories li {
+    margin-bottom: 10px;
+}
+
+.shop-search {
+    margin-bottom: 30px;
+}
+
+.shop-search h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.shop-search form {
+    display: flex;
+    flex-direction: column;
+}
+
+.shop-search input[type="search"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.shop-search input[type="submit"] {
+    padding: 10px;
+    background-color: #0073e6;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.shop-search input[type="submit"]:hover {
+    background-color: #005bb5;
+}
+
+/* Product Grid */
+.shop-products {
+    width: 70%;
+    padding: 20px;
+}
+
+.shop-products h1 {
+    font-size: 32px;
+    margin-bottom: 30px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.product-item {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.product-item:hover {
+    transform: scale(1.05);
+}
+
+.product-thumbnail img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-price {
+    font-size: 16px;
+    color: #0073e6;
+    font-weight: bold;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .shop-sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .shop-products {
+        width: 100%;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}

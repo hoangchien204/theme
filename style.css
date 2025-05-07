@@ -1,0 +1,39 @@
+/*
+Theme Name: Fruity
+Theme URI: https://github.com/nodevs/Fruity-WordPress
+Author: NoDevs
+Author URI: https://nodevs.org/
+Description: Fruity is a vibrant and customizable WordPress theme crafted for developers and creatives. Showcase your projects, highlight your tech skills, and impress with a modern and sleek design.
+Requires at least: 1.0
+Tested up to: 5.9
+Requires PHP: 7.2
+Version: 1.0
+License: Free
+License URI: #
+Text Domain: fruity
+Tags: WordPress, Theme Development, Developer Portfolio, Web Design, Software Development, Coding, Programming, Tech Projects, Front-end Development, Back-end Development, Mobile Apps, UI/UX Design, Graphic Design, Full Stack Development, Open Source, Frameworks, Languages (e.g., JavaScript, Python, PHP), Tools and Technologies, Freelancers, Job Seekers
+*/
+* {
+  font-family: "Ubuntu", sans-serif;
+}
+.font-size-small {
+  font-size: 14px;
+}
+/* comon banner */
+.common-banner {
+  background-image: url(img/banner/banner-single-page.jpg);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-color: #071c1f;
+  width: 100%;
+  height: 400px;
+}
+.bg-opacity {
+  width: 100%;
+  height: 100%;
+  background-color: #071c1f;
+  opacity: 0.9;
+}
+/* comon banner end */

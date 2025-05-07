@@ -1,0 +1,42 @@
+.footer-wrap {
+  box-shadow: 0px -10px 20px -10px rgba(0, 0, 0, 0.123);
+  margin-top: 100px;
+  background-color: var(--section-bg-clr);
+}
+.footer-menu {
+  list-style-type: none;
+}
+.footer-menu > li {
+  margin-top: 15px;
+  transition: 0.3s all ease-in-out;
+}
+.footer-menu > li > a {
+  text-decoration: none;
+  color: var(--black-clr);
+}
+.footer-menu > li:hover {
+  margin-left: 15px;
+}
+.footer-menu {
+  width: 190px !important;
+}
+.copy-right-info {
+  background-color: #071c1f;
+  color: var(--white-clr);
+}
+.copy-right-info-msg {
+  color: var(--white-clr);
+  transition: 0.3s all ease-in-out;
+}
+.copy-right-info-msg:hover {
+  text-decoration: none;
+  color: var(--main-clr);
+}
+.nwsltr {
+  background-color: var(--main-clr);
+  padding: 10px;
+  margin-top: 1px;
+  border-radius: 0px 8px 8px 0px;
+  margin-left: -50px;
+  position: absolute;
+}

@@ -1,0 +1,12 @@
+:root {
+  --main-clr: #80b500;
+  --bg-clr: #ffffff;
+  --black-clr: #000000;
+  --shadow-clr: #dddddd;
+  --section-bg-clr: #f7f5eb;
+  --white-clr: #ffffff;
+  --bg-clr2: #F5F5F3;
+}
+.main-color {
+  color: #80b500;
+}

@@ -1,0 +1,35 @@
+.count-down-wrapper {
+    width: 500px;
+    margin: 0 auto;
+	text-align: center;
+}
+.day-wrap,
+.hours-wrap,
+.minutes-wrap,
+.second-wrap{
+    color: var(--black-clr);
+    text-align: center;
+}
+.num{
+    font-size: 25px;
+    margin-bottom: 10px !important;
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 100%;
+    background: var(--white-clr);
+}
+.the-time{
+    font-size: 40px;
+    color: greenyellow;
+}
+.hurry-up-sub-heading{
+    color: var(--main-clr);
+}
+.hurry-up-text{
+    width: 500px;
+    margin: 0 auto;
+}
+.hurry-up-wrap{
+    padding: 100px 0px 100px 0px  !important;
+    background-color: var(--section-bg-clr);
+}
