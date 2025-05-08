@@ -25,7 +25,7 @@ Description: Trang hiển thị danh sách sản phẩm từ bảng wp_hanghoa k
 
     <!-- Main Shop Section -->
     <section class="shop-page">
-        <div class="container">
+        <div class="container-product">
             <div class="shop-sidebar">
                 <!-- Product Categories -->
                 <div class="shop-categories">
@@ -125,7 +125,7 @@ $results = $wpdb->get_results("
     padding: 20px;
 }
 
-.container {
+.container-product{
     width: 100%;
     display: flex;
     justify-content: space-between;

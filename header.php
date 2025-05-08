@@ -195,18 +195,18 @@
     </header> -->
     
     <!-- header end -->
-    <header class="fruity-header">
+     <header class="fruity-header">
     <div class="container">
-        <div class="row">
+        <div class="row align-items-center">
             <div class="col">
                 <a class="navbar-brand" href="<?php echo esc_url(home_url('/')); ?>">
                     <img src="<?php echo get_template_directory_uri(); ?>/img/logo/logo.png" alt="Your Logo" width="120">
-                </a>        
+                </a>
             </div>
-            
-            <div class="col-10">
+
+            <div class="col-8">
                 <div class="menu-wrap">
-                    <ul class="custom-menu my-menu">
+                    <ul class="custom-menu my-menu mb-0">
                         <?php
                         $current_url = $_SERVER['REQUEST_URI'];
                         $is_custom_logged_in = isset($_COOKIE['custom_user_logged_in']) && isset($_COOKIE['custom_user_id']);
@@ -232,18 +232,32 @@
                     </ul>
                 </div>
             </div>
-            
-            <div class="col">
-                <i class="fa fa-bars menu-humberger"></i>
+
+            <div class="col-2 d-flex justify-content-end align-items-center gap-3">
+                <a href="<?php echo esc_url(home_url('/gio-hang')); ?>" class="cart-icon position-relative">
+                    <i class="fa fa-shopping-cart fa-lg"></i>
+                    <span class="cart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        0
+                    </span>
+                </a>
+                <i class="fa fa-bars menu-humberger fa-lg"></i>
             </div>
         </div>
     </div>
 </header>
 
-
 <style>
 .menu-wrap {
     text-align: center;
+}
+.cart-icon {
+    color: #333;
+    text-decoration: none;
+    position: relative;
+}
+
+.cart-count {
+    font-size: 11px;
 }
 
 .custom-menu.my-menu {
