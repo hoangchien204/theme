@@ -63,9 +63,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'add_product' && check_admin
                 'SoLanXem' => 0,
                 'MoTa' => $mota ?: null,
                 'SoLanMua' => 0,
-                'SoLuongTonKho' => $soluongtonkho
+                'SoLuongTonKho' => $soluongtonkho,
+                'TrangThai' => 1
             ],
-            ['%s', '%d', '%s', '%f', '%s', '%s', '%f', '%d', '%s', '%d', '%d']
+            ['%s', '%d', '%s', '%f', '%s', '%s', '%f', '%d', '%s', '%d', '%d', '%d']
         );
 
         if ($result !== false) {
@@ -152,10 +153,16 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit_product' && check_admi
     }
 }
 
-// Xử lý xóa sản phẩm
+// Xử lý xóa sản phẩm (xóa mềm)
 if (isset($_GET['action']) && $_GET['action'] === 'delete_product' && isset($_GET['mahh']) && check_admin_referer('delete_product_nonce')) {
     $mahh = intval($_GET['mahh']);
-    $result = $wpdb->delete('wp_hanghoa', ['MaHH' => $mahh], ['%d']);
+    $result = $wpdb->update(
+        'wp_hanghoa',
+        ['TrangThai' => 0],
+        ['MaHH' => $mahh],
+        ['%d'],
+        ['%d']
+    );
 
     if ($result !== false) {
         wp_redirect(add_query_arg(['status' => 'success', 'message' => 'Sản phẩm đã được xóa thành công!'], wp_get_referer()));
@@ -166,10 +173,30 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete_product' && isset($_GE
     }
 }
 
+// Xử lý khôi phục sản phẩm
+if (isset($_GET['action']) && $_GET['action'] === 'restore_product' && isset($_GET['mahh']) && check_admin_referer('restore_product_nonce')) {
+    $mahh = intval($_GET['mahh']);
+    $result = $wpdb->update(
+        'wp_hanghoa',
+        ['TrangThai' => 1],
+        ['MaHH' => $mahh],
+        ['%d'],
+        ['%d']
+    );
+
+    if ($result !== false) {
+        wp_redirect(add_query_arg(['status' => 'success', 'message' => 'Sản phẩm đã được khôi phục thành công!'], wp_get_referer()));
+        exit;
+    } else {
+        wp_redirect(add_query_arg(['status' => 'error', 'message' => 'Khôi phục sản phẩm không thành công: ' . $wpdb->last_error], wp_get_referer()));
+        exit;
+    }
+}
+
 $product = null;
 if (isset($_GET['edit_mahh'])) {
     $mahh = intval($_GET['edit_mahh']);
-    $product = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_hanghoa WHERE MaHH = %d", $mahh));
+    $product = $wpdb->get_row($wpdb->prepare("SELECT * FROM wp_hanghoa WHERE MaHH = %d AND TrangThai = 1", $mahh));
 }
 ?>
 
@@ -227,25 +254,35 @@ if (isset($_GET['edit_mahh'])) {
                 if ($products) {
                     foreach ($products as $product_item) {
                         $image_path = !empty($product_item->Hinh) ? esc_url(get_stylesheet_directory_uri() . '/img/' . $product_item->Hinh) : esc_url(get_stylesheet_directory_uri() . '/img/placeholder.jpg');
+                        $is_deleted = ((int)$product_item->TrangThai === 0);
                         ?>
-                        <div class="product-item">
+                        <div class="product-item <?php echo $is_deleted ? 'product-deleted' : ''; ?>">
                             <img src="<?php echo $image_path; ?>" alt="Ảnh sản phẩm" />
                             <h3><?php echo esc_html($product_item->TenHH); ?></h3>
                             <p>Giá: <?php echo number_format($product_item->DonGia, 0, ',', '.'); ?>đ</p>
                             <div class="product-actions">
-                                <a href="<?php echo add_query_arg(['edit_mahh' => $product_item->MaHH]); ?>" class="btn-edit">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2"/>
-                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                    Sửa
-                                </a>
-                                <a href="<?php echo wp_nonce_url(add_query_arg(['action' => 'delete_product', 'mahh' => $product_item->MaHH]), 'delete_product_nonce'); ?>" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
-                                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-8 0v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6m-4 0v14" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                    Xóa
-                                </a>
+                                <?php if (!$is_deleted) { ?>
+                                    <a href="<?php echo add_query_arg(['edit_mahh' => $product_item->MaHH]); ?>" class="btn-edit">
+                                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2"/>
+                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        Sửa
+                                    </a>
+                                    <a href="<?php echo wp_nonce_url(add_query_arg(['action' => 'delete_product', 'mahh' => $product_item->MaHH]), 'delete_product_nonce'); ?>" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m-8 0v14a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6m-4 0v14" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        Xóa
+                                    </a>
+                                <?php } else { ?>
+                                    <a href="<?php echo wp_nonce_url(add_query_arg(['action' => 'restore_product', 'mahh' => $product_item->MaHH]), 'restore_product_nonce'); ?>" class="btn-restore" onclick="return confirm('Bạn có chắc chắn muốn khôi phục sản phẩm này?')">
+                                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4 12a8 8 0 0 1 8-8 8 8 0 0 1 8 8 8 8 0 0 1-8 8 8 8 0 0 1-8-8zm8-2v4l3.5 2" stroke="currentColor" stroke-width="2"/>
+                                        </svg>
+                                        Khôi phục
+                                    </a>
+                                <?php } ?>
                             </div>
                         </div>
                         <?php
@@ -422,7 +459,7 @@ html, body {
     margin-top: 10px;
 }
 
-.btn-edit, .btn-delete {
+.btn-edit, .btn-delete, .btn-restore {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -457,6 +494,17 @@ html, body {
     transform: translateY(-2px);
 }
 
+.btn-restore {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-restore:hover {
+    background-color: #27ae60;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
 .btn-icon {
     width: 16px;
     height: 16px;
@@ -483,6 +531,12 @@ html, body {
 .product-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-item.product-deleted {
+    opacity: 0.6;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
 }
 
 .product-item img {
@@ -563,7 +617,6 @@ html, body {
     align-items: center;
     justify-content: center;
     display: flex;
-;
 }
 
 .form-popup button:hover {
@@ -659,7 +712,7 @@ select[name="maloai"] option:hover {
         padding: 15px;
     }
 
-    .btn-edit, .btn-delete {
+    .btn-edit, .btn-delete, .btn-restore {
         padding: 6px 12px;
         font-size: 0.9em;
     }
