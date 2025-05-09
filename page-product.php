@@ -43,7 +43,7 @@ Description: Trang hiển thị chi tiết sản phẩm từ bảng wp_hanghoa
                 <?php endif; ?>
             </div>
             <div class="product-info">
-                <h1><?php echo esc_html($product->TenHH); ?></h1>
+                <h1 id="product-name"><?php echo esc_html($product->TenHH); ?></h1>
                 <p class="product-price"><?php echo number_format($product->DonGia, 0, ',', '.') . ' VND'; ?></p>
                 <p class="product-sales">Đã bán: <?php echo esc_html($product->SoLanMua); ?></p>
                 <div class="product-description">
@@ -105,8 +105,37 @@ Description: Trang hiển thị chi tiết sản phẩm từ bảng wp_hanghoa
 <!-- JS mô phỏng -->
 <script>
 function addToCart(productId) {
-    alert("Sản phẩm " + productId + " đã được thêm vào giỏ hàng (mô phỏng)");
-    // Bạn có thể dùng fetch/ajax ở đây để xử lý thực tế
+    // Lấy thông tin sản phẩm từ HTML
+    const name = document.getElementById('product-name').innerText;
+    const priceText = document.querySelector('.product-price').innerText;
+    const price = parseInt(priceText.replace(/[^\d]/g, ''));
+    const image = document.querySelector('.product-image img').src;
+
+    // Tạo object sản phẩm
+    const product = {
+        id: productId,
+        name: name,
+        price: price,
+        image: image,
+        quantity: 1
+    };
+    console.log("🛒 Thêm vào giỏ:", product);
+    // Lấy giỏ hàng từ LocalStorage hoặc tạo mới
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Kiểm tra sản phẩm đã có trong giỏ chưa
+    const existing = cart.find(item => item.id === productId);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push(product);
+    }
+
+    // Lưu lại vào localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // Chuyển đến trang giỏ hàng
+    window.location.href = "/wordpress/gio-hang";
 }
 
 function buyNow(productId) {
