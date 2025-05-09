@@ -218,7 +218,7 @@
                             <a href="<?php echo esc_url(home_url('/shop')); ?>">Shop</a>
                         </li>
                         <li class="menu-item <?php echo (strpos($current_url, '/about') !== false) ? 'active' : ''; ?>">
-                            <a href="<?php echo esc_url(home_url('/about')); ?>">About</a>
+                            <a href="<?php echo esc_url(home_url('/oder')); ?>">Lịch sử</a>
                         </li>
                         <?php if ($is_custom_logged_in) : ?>
                             <li class="menu-item">
