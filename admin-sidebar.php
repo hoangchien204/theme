@@ -52,10 +52,16 @@ if (strpos($current_url, 'admin-dashboard') !== false) {
 
 <style>
   /* Sidebar Styling */
-
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 .admin-wrapper {
     display: flex;
     min-height: 100vh;
+    width: 100vw;
 }
 
 .admin-sidebar {
@@ -64,8 +70,8 @@ if (strpos($current_url, 'admin-dashboard') !== false) {
     padding: 20px;
     color: white;
     height: 100vh;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    position: relative; /* Không cần position fixed nữa */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .admin-sidebar .logo {
@@ -114,7 +120,6 @@ if (strpos($current_url, 'admin-dashboard') !== false) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* margin-left: 250px; Offset for sidebar */
     min-height: 60px;
 }
 
