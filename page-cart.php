@@ -155,6 +155,14 @@ if (shippingEl) shippingEl.textContent = formatCurrency(shipping);
 
       subtotalEl.textContent = formatCurrency(subtotal);
       totalEl.textContent = formatCurrency(total);
+      // Bổ sung sau khi hiển thị xong sản phẩm:
+document.querySelectorAll('.delete-checkbox').forEach(cb => {
+  cb.addEventListener('change', updateSelectedTotal);
+});
+
+// Gọi để cập nhật tổng ban đầu (nếu có checkbox nào đã được chọn)
+updateSelectedTotal();
+
     }
 
     function updateQty(index, delta) {
@@ -166,6 +174,7 @@ if (shippingEl) shippingEl.textContent = formatCurrency(shipping);
         }
         localStorage.setItem('cart', JSON.stringify(cart));
         loadCart();
+        updateSelectedTotal();
       }
     }
     function deleteSelectedItems() {
@@ -181,6 +190,8 @@ if (shippingEl) shippingEl.textContent = formatCurrency(shipping);
 
   localStorage.setItem('cart', JSON.stringify(cart));
   loadCart();
+  updateSelectedTotal();
+
   const selectAll = document.getElementById('select-all');
 if (selectAll) {
   selectAll.checked = false;
@@ -195,6 +206,7 @@ if (selectAll) {
     selectAllCheckbox.addEventListener('change', function () {
       const checkboxes = document.querySelectorAll('.delete-checkbox');
       checkboxes.forEach(cb => cb.checked = selectAllCheckbox.checked);
+      updateSelectedTotal();
     });
   }
 });
@@ -323,14 +335,37 @@ document.getElementById('checkout-btn').addEventListener('click', function () {
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
   const selectedIndexes = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index));
 
-  const selectedItems = selectedIndexes.map(index => cart[index]);
+  const selectedItems = selectedIndexes.map(index => cart[index]).filter(item => item);
   
   // Lưu vào localStorage để truyền sang trang thanh toán
   localStorage.setItem('selectedItemsForCheckout', JSON.stringify(selectedItems));
+alert("Sản phẩm được chọn:\n" + selectedItems.map(item => `${item.name} × ${item.quantity}`).join('\n'));
 
   // Chuyển hướng sang trang thanh toán (ví dụ checkout)
   window.location.href = "/wordpress/check-out"; // hoặc "/checkout" tùy theo slug bạn cấu hình
 });
+
+function updateSelectedTotal() {
+  const checkboxes = document.querySelectorAll('.delete-checkbox');
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const shipping = parseInt(localStorage.getItem('shippingFee')) || 0;
+
+  let subtotal = 0;
+  checkboxes.forEach(cb => {
+    if (cb.checked) {
+      const index = parseInt(cb.dataset.index);
+      const item = cart[index];
+      if (item) {
+        subtotal += item.price * item.quantity;
+      }
+    }
+  });
+
+  const total = subtotal + shipping;
+
+  document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+  document.getElementById('total').textContent = formatCurrency(total);
+}
 
 </script>
 <div id="toast" class="fixed bottom-6 right-6 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm hidden z-50">

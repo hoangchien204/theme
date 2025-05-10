@@ -139,10 +139,28 @@ function addToCart(productId) {
 }
 
 function buyNow(productId) {
-    alert("Chuyển đến trang thanh toán cho sản phẩm " + productId + " (mô phỏng)");
-    // Có thể redirect đến trang thanh toán nếu có
-    // window.location.href = "/thanh-toan/?id=" + productId;
+    // Lấy thông tin sản phẩm từ HTML
+    const name = document.getElementById('product-name').innerText;
+    const priceText = document.querySelector('.product-price').innerText;
+    const price = parseInt(priceText.replace(/[^\d]/g, ''));
+    const image = document.querySelector('.product-image img').src;
+
+    // Tạo object sản phẩm
+    const product = {
+        id: productId,
+        name: name,
+        price: price,
+        image: image,
+        quantity: 1
+    };
+
+    // Lưu vào localStorage để dùng ở trang thanh toán
+    localStorage.setItem('checkoutItem', JSON.stringify(product));
+
+    // Chuyển đến trang thanh toán
+    window.location.href = "/wordpress/check-out"; // đổi theo đường dẫn thực tế của bạn
 }
+
 </script>
 </body>
 </html>
