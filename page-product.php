@@ -87,7 +87,7 @@ Description: Trang hiển thị chi tiết sản phẩm từ bảng wp_hanghoa
         <?php endforeach; ?>
     </div>
     <div class="related-products-more">
-        <a href="/danh-muc?maloai=<?php echo $product->MaLoai; ?>" class="btn-view-more">Xem thêm</a>
+        <a href="/wordpress/shop?maloai=<?php echo $product->MaLoai; ?>" class="btn-view-more">Xem thêm</a>
     </div>
 </div>
 <?php endif; ?>
@@ -153,14 +153,14 @@ function buyNow(productId) {
         image: image,
         quantity: 1
     };
+    const selectedItems = [product];
 
     // Lưu vào localStorage để dùng ở trang thanh toán
-    localStorage.setItem('checkoutItem', JSON.stringify(product));
+    localStorage.setItem('selectedItemsForCheckout', JSON.stringify(selectedItems));
 
     // Chuyển đến trang thanh toán
-    window.location.href = "/wordpress/check-out"; // đổi theo đường dẫn thực tế của bạn
+    window.location.href = "/wordpress/check-out";
 }
-
 </script>
 </body>
 </html>
