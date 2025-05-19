@@ -347,8 +347,7 @@ Template Name: Giỏ Hàng
 
       // Lưu vào localStorage để truyền sang trang thanh toán
       localStorage.setItem('selectedItemsForCheckout', JSON.stringify(selectedItems));
-      alert("Sản phẩm được chọn:\n" + selectedItems.map(item => `${item.name} × ${item.quantity}`).join('\n'));
-
+     
       window.location.href = "/wordpress/check-out"; 
     });
 
