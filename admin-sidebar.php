@@ -58,10 +58,12 @@ if (strpos($current_url, 'admin-dashboard') !== false) {
     box-sizing: border-box;
     font-family: Arial, sans-serif;
 }
+
 .admin-wrapper {
     display: flex;
     min-height: 100vh;
     width: 100vw;
+        height: 100%;
 }
 
 .admin-sidebar {
@@ -72,6 +74,7 @@ if (strpos($current_url, 'admin-dashboard') !== false) {
     height: 100vh;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     position: relative;
+    height: 100%;
 }
 
 .admin-sidebar .logo {

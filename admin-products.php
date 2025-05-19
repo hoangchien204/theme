@@ -154,24 +154,68 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit_product' && check_admi
 }
 
 // Xử lý xóa sản phẩm (xóa mềm)
-if (isset($_GET['action']) && $_GET['action'] === 'delete_product' && isset($_GET['mahh']) && check_admin_referer('delete_product_nonce')) {
+
+if (
+    isset($_GET['action']) && 
+    $_GET['action'] === 'delete_product' && 
+    isset($_GET['mahh']) && 
+    check_admin_referer('delete_product_nonce')
+) {
+    global $wpdb;
     $mahh = intval($_GET['mahh']);
-    $result = $wpdb->update(
-        'wp_hanghoa',
-        ['TrangThai' => 0],
-        ['MaHH' => $mahh],
-        ['%d'],
-        ['%d']
+
+    // Kiểm tra sản phẩm có trong đơn hàng hay không
+    $order_count = $wpdb->get_var(
+        $wpdb->prepare("SELECT COUNT(*) FROM wp_chitiethd WHERE MaHH = %d", $mahh)
     );
 
-    if ($result !== false) {
-        wp_redirect(add_query_arg(['status' => 'success', 'message' => 'Sản phẩm đã được xóa thành công!'], wp_get_referer()));
-        exit;
+    if ($order_count > 0) {
+        // Xóa mềm nếu đã có trong đơn hàng
+        $result = $wpdb->update(
+            'wp_hanghoa',
+            ['TrangThai' => 0],
+            ['MaHH' => $mahh],
+            ['%d'],
+            ['%d']
+        );
+
+        if ($result !== false) {
+            wp_redirect(add_query_arg([
+                'status' => 'success',
+                'message' => 'Sản phẩm đã được ẩn (do đã có trong đơn hàng).'
+            ], wp_get_referer()));
+            exit;
+        } else {
+            wp_redirect(add_query_arg([
+                'status' => 'error',
+                'message' => 'Ẩn sản phẩm không thành công: ' . $wpdb->last_error
+            ], wp_get_referer()));
+            exit;
+        }
     } else {
-        wp_redirect(add_query_arg(['status' => 'error', 'message' => 'Xóa sản phẩm không thành công: ' . $wpdb->last_error], wp_get_referer()));
-        exit;
+        // Xóa cứng nếu chưa có trong đơn hàng
+        $deleted = $wpdb->delete(
+            'wp_hanghoa',
+            ['MaHH' => $mahh],
+            ['%d']
+        );
+
+        if ($deleted !== false) {
+            wp_redirect(add_query_arg([
+                'status' => 'success',
+                'message' => 'Sản phẩm đã được xóa.'
+            ], wp_get_referer()));
+            exit;
+        } else {
+            wp_redirect(add_query_arg([
+                'status' => 'error',
+                'message' => 'Xóa vĩnh viễn không thành công: ' . $wpdb->last_error
+            ], wp_get_referer()));
+            exit;
+        }
     }
 }
+
 
 // Xử lý khôi phục sản phẩm
 if (isset($_GET['action']) && $_GET['action'] === 'restore_product' && isset($_GET['mahh']) && check_admin_referer('restore_product_nonce')) {

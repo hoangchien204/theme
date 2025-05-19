@@ -23,7 +23,11 @@
     <div class="container-oder order-history-page">
             <?php
             // Nội dung từ plugin qua shortcode
-            echo do_shortcode('[order_history]');
+            if (have_posts()) :
+                while (have_posts()) : the_post();
+                    the_content();
+                endwhile;
+            endif;
             ?>
     </div>
 
