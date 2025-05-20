@@ -153,8 +153,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'edit_product' && check_admi
     }
 }
 
-// Xử lý xóa sản phẩm (xóa mềm)
-
+//xóa mềm
 if (
     isset($_GET['action']) && 
     $_GET['action'] === 'delete_product' && 

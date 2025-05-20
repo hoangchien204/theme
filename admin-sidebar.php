@@ -11,18 +11,16 @@ if (!current_user_can('manage_options')) {
 
 // Xác định tiêu đề dựa vào đường dẫn URL hiện tại
 $current_url = $_SERVER['REQUEST_URI'];
-if (strpos($current_url, 'admin-dashboard') !== false) {
-    $admin_page_title = 'Bảng điều khiển';
-} elseif (strpos($current_url, 'admin-products') !== false) {
+if (strpos($current_url, 'admin-products') !== false) {
     $admin_page_title = 'Quản lý Sản phẩm';
 } elseif (strpos($current_url, 'admin-orders') !== false) {
     $admin_page_title = 'Quản lý Đơn hàng';
 } elseif (strpos($current_url, 'admin-customers') !== false) {
     $admin_page_title = 'Quản lý Khách hàng';
-} elseif (strpos($current_url, 'admin-settings') !== false) {
-    $admin_page_title = 'Cài đặt';
+} elseif (strpos($current_url, 'page-categories') !== false) {
+    $admin_page_title = 'Danh mục sản phẩm';
 } else {
-    $admin_page_title = 'Trang Quản trị';
+    $admin_page_title = 'Quản lý';
 }
 ?>
 
@@ -30,11 +28,11 @@ if (strpos($current_url, 'admin-dashboard') !== false) {
     <aside class="admin-sidebar">
         <h2 class="logo">Ecommerce Admin</h2>
         <ul class="admin-menu">
-            <li><a href="<?php echo site_url('/admin-dashboard'); ?>">Bảng điều khiển</a></li>
+           
             <li><a href="<?php echo site_url('/admin-products'); ?>">Sản phẩm</a></li>
             <li><a href="<?php echo site_url('/admin-orders'); ?>">Đơn hàng</a></li>
-            <li><a href="<?php echo site_url('/admin-customers'); ?>">Khách hàng</a></li>
-            <li><a href="<?php echo site_url('/admin-settings'); ?>">Cài đặt</a></li>
+            <li><a href="<?php echo site_url('/page-categories'); ?>">Danh mục sản phẩm</a></li>
+            <li><a href="<?php echo site_url('/page-statistical-report'); ?>">Thống kê</a></li>
         </ul>
     </aside>
 

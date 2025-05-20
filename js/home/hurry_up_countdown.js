@@ -1,47 +1,33 @@
 var year = 2025;
-var targetDate = new Date(`jan 01, ${year}`);
-var month = document.querySelector(".month");
+var targetDate = new Date(`May 25, 2025 00:00:00`);
 var the_time = document.querySelector(".the-time");
+
 function countDown() {
-  var currentdate = new Date();
-  var dateDifference = targetDate - currentdate;
-  var hours = document.querySelector(".hours");
-  var minutes = document.querySelector(".minutes");
-  var second = document.querySelector(".second");
-  var day = document.querySelector(".day");
-  day.innerHTML = `${Math.floor(dateDifference / 1000 / 86400)}`;
-  //getting the remaining hourse so that we can get the actual count down
-  hours.innerHTML = `${Math.floor((dateDifference / 1000 / 3600) % 24)}`;
-  minutes.innerHTML = `${Math.floor((dateDifference / 1000 / 60) % 60)}`;
-  second.innerHTML = `${Math.floor((dateDifference / 1000) % 60)}`;
+  var currentDate = new Date();
+  var timeDiff = targetDate - currentDate;
+
+  // Nếu đã qua thời gian đếm ngược thì dừng lại ở 00:00:00
+  var totalSeconds = Math.max(0, Math.floor(timeDiff / 1000));
+
+  var days = Math.floor(totalSeconds / 86400);
+  var hours = Math.floor((totalSeconds % 86400) / 3600);
+  var minutes = Math.floor((totalSeconds % 3600) / 60);
+  var seconds = totalSeconds % 60;
+
+  document.querySelector(".day").innerHTML = String(days).padStart(2, '0');
+  document.querySelector(".hours").innerHTML = String(hours).padStart(2, '0');
+  document.querySelector(".minutes").innerHTML = String(minutes).padStart(2, '0');
+  document.querySelector(".second").innerHTML = String(seconds).padStart(2, '0');
 }
+
 countDown();
 setInterval(countDown, 1000);
-if (targetDate.getMonth() == 0) {
-  the_time.innerHTML = `January`;
-} else if (targetDate.getMonth() == 1) {
-  the_time.innerHTML = `February`;
-} else if (targetDate.getMonth() == 2) {
-  the_time.innerHTML = `March`;
-} else if (targetDate.getMonth() == 3) {
-  the_time.innerHTML = `April`;
-} else if (targetDate.getMonth() == 4) {
-  the_time.innerHTML = `May`;
-} else if (targetDate.getMonth() == 5) {
-  the_time.innerHTML = `June`;
-} else if (targetDate.getMonth() == 6) {
-  the_time.innerHTML = `July`;
-} else if (targetDate.getMonth() == 7) {
-  the_time.innerHTML = `August`;
-} else if (targetDate.getMonth() == 8) {
-  the_time.innerHTML = `September`;
-} else if (targetDate.getMonth() == 9) {
-  the_time.innerHTML = `October`;
-} else if (targetDate.getMonth() == 10) {
-  the_time.innerHTML = `November`;
-} else if (targetDate.getMonth() == 11) {
-  the_time.innerHTML = `December`;
-} else {
-  month.innerHTML = `Nan`;
-}
-the_time.innerHTML += " " + `${targetDate.getDate()}` + " " + `${targetDate.getFullYear()}`;
+
+// Hiển thị thời gian đếm đến (the_time)
+const thangVN = [
+  "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4",
+  "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8",
+  "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+];
+
+the_time.innerHTML = `${thangVN[targetDate.getMonth()]} ${targetDate.getDate()}, ${targetDate.getFullYear()}`;

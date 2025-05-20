@@ -133,6 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
+
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -142,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <?php wp_head(); ?>
 </head>
+
 <body <?php body_class(); ?>>
     <?php get_header(); ?>
     <?php get_template_part("Templates/common-banner"); ?>
@@ -328,56 +330,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         function renderCart() {
-    const selectedItems = JSON.parse(localStorage.getItem('selectedItemsForCheckout')) || [];
-    let subtotal = 0;
-    cartContainer.innerHTML = '';
+            const selectedItems = JSON.parse(localStorage.getItem('selectedItemsForCheckout')) || [];
+            let subtotal = 0;
+            cartContainer.innerHTML = '';
 
-    if (selectedItems.length === 0) {
-        cartContainer.innerHTML = '<p class="text-gray-500">Không có sản phẩm nào được chọn.</p>';
-    } else {
-        selectedItems.forEach(item => {
-            const itemTotal = item.quantity * item.price;
-            subtotal += itemTotal;
+            if (selectedItems.length === 0) {
+                cartContainer.innerHTML = '<p class="text-gray-500">Không có sản phẩm nào được chọn.</p>';
+            } else {
+                selectedItems.forEach(item => {
+                    const itemTotal = item.quantity * item.price;
+                    subtotal += itemTotal;
 
-            const div = document.createElement('div');
-            div.className = 'flex justify-between';
-            div.innerHTML = `
+                    const div = document.createElement('div');
+                    div.className = 'flex justify-between';
+                    div.innerHTML = `
                 <p class="flex-1 text-ellipsis overflow-hidden whitespace-nowrap pr-2">
                     ${item.name} <span class="font-semibold">× ${item.quantity}</span>
                 </p>
                 <p class="font-semibold">${formatCurrency(itemTotal)}</p>
             `;
-            cartContainer.appendChild(div);
-        });
-    }
+                    cartContainer.appendChild(div);
+                });
+            }
 
-    subtotalElem.textContent = formatCurrency(subtotal);
-    totalElem.textContent = formatCurrency(subtotal + shippingFee);
-}
+            subtotalElem.textContent = formatCurrency(subtotal);
+            totalElem.textContent = formatCurrency(subtotal + shippingFee);
+        }
 
 
         renderCart();
 
-       function updateShippingFeeAndTotal() {
-    const cityCode = document.getElementById('city').value;
-    const districtCode = document.getElementById('district').value;
+        function updateShippingFeeAndTotal() {
+            const cityCode = document.getElementById('city').value;
+            const districtCode = document.getElementById('district').value;
 
-    const isImmediate = document.getElementById('shipping-now').checked;
+            const isImmediate = document.getElementById('shipping-now').checked;
 
-    const fee = isImmediate
-        ? 200000 // Vận chuyển ngay (cố định)
-        : calculateShippingFee('vn', Number(cityCode), Number(districtCode)); // Vận chuyển thường
+            const fee = isImmediate ?
+                200000 // Vận chuyển ngay (cố định)
+                :
+                calculateShippingFee('vn', Number(cityCode), Number(districtCode)); // Vận chuyển thường
 
-    document.getElementById('shipping-fee-immidiate').textContent = formatCurrency(200000);
-    document.getElementById('shipping-fee-later').textContent = formatCurrency(calculateShippingFee('vn', Number(cityCode), Number(districtCode)));
+            document.getElementById('shipping-fee-immidiate').textContent = formatCurrency(200000);
+            document.getElementById('shipping-fee-later').textContent = formatCurrency(calculateShippingFee('vn', Number(cityCode), Number(districtCode)));
 
-    const selectedItems = JSON.parse(localStorage.getItem('selectedItemsForCheckout')) || [];
-    const subtotal = selectedItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
-    totalElem.textContent = formatCurrency(subtotal + fee);
-}
+            const selectedItems = JSON.parse(localStorage.getItem('selectedItemsForCheckout')) || [];
+            const subtotal = selectedItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+            totalElem.textContent = formatCurrency(subtotal + fee);
+        }
 
-document.getElementById('shipping-now').addEventListener('change', updateShippingFeeAndTotal);
-document.getElementById('shipping-later').addEventListener('change', updateShippingFeeAndTotal);
+        document.getElementById('shipping-now').addEventListener('change', updateShippingFeeAndTotal);
+        document.getElementById('shipping-later').addEventListener('change', updateShippingFeeAndTotal);
 
 
 
@@ -426,13 +429,30 @@ document.getElementById('shipping-later').addEventListener('change', updateShipp
         });
 
         function updateRequiredStars() {
-            const fields = [
-                { id: 'fullname', label: 'fullname' },
-                { id: 'phone', label: 'phone' },
-                { id: 'email', label: 'email' },
-                { id: 'city', label: 'city' },
-                { id: 'district', label: 'district' },
-                { id: 'address', label: 'address' }
+            const fields = [{
+                    id: 'fullname',
+                    label: 'fullname'
+                },
+                {
+                    id: 'phone',
+                    label: 'phone'
+                },
+                {
+                    id: 'email',
+                    label: 'email'
+                },
+                {
+                    id: 'city',
+                    label: 'city'
+                },
+                {
+                    id: 'district',
+                    label: 'district'
+                },
+                {
+                    id: 'address',
+                    label: 'address'
+                }
             ];
 
             fields.forEach(field => {
@@ -456,6 +476,7 @@ document.getElementById('shipping-later').addEventListener('change', updateShipp
                 updateRequiredStars();
             });
         });
+
         function getCartItems() {
             try {
                 const stored = localStorage.getItem('cart');
@@ -467,141 +488,141 @@ document.getElementById('shipping-later').addEventListener('change', updateShipp
             }
         }
 
-  document.getElementById('dathang').addEventListener('click', function (e) {
-      e.preventDefault();
+        document.getElementById('dathang').addEventListener('click', function(e) {
+            e.preventDefault();
 
-      const requiredFields = ['fullname', 'phone', 'email', 'city', 'district', 'address'];
-      let allFilled = true;
-      let errorMessages = [];
-      let userInfo = {};
+            const requiredFields = ['fullname', 'phone', 'email', 'city', 'district', 'address'];
+            let allFilled = true;
+            let errorMessages = [];
+            let userInfo = {};
 
-      requiredFields.forEach(id => {
-          const field = document.getElementById(id);
-          if (!field || field.value.trim() === '') {
-              allFilled = false;
-              field?.classList.add('border-red-500');
-              errorMessages.push(`Vui lòng điền ${getFieldName(id)}.`);
-          } else {
-              field?.classList.remove('border-red-500');
-              userInfo[id] = field.value.trim();
-          }
-      });
+            requiredFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (!field || field.value.trim() === '') {
+                    allFilled = false;
+                    field?.classList.add('border-red-500');
+                    errorMessages.push(`Vui lòng điền ${getFieldName(id)}.`);
+                } else {
+                    field?.classList.remove('border-red-500');
+                    userInfo[id] = field.value.trim();
+                }
+            });
 
-      const phoneField = document.getElementById('phone');
-      if (phoneField && phoneField.value.trim() !== '') {
-          const phoneValue = phoneField.value.trim();
-          if (!/^0\d{9}$/.test(phoneValue)) {
-              allFilled = false;
-              phoneField.classList.add('border-red-500');
-              errorMessages.push('Số điện thoại không hợp lệ (phải gồm 10 chữ số, bắt đầu bằng 0).');
-          }
-      }
+            const phoneField = document.getElementById('phone');
+            if (phoneField && phoneField.value.trim() !== '') {
+                const phoneValue = phoneField.value.trim();
+                if (!/^0\d{9}$/.test(phoneValue)) {
+                    allFilled = false;
+                    phoneField.classList.add('border-red-500');
+                    errorMessages.push('Số điện thoại không hợp lệ (phải gồm 10 chữ số, bắt đầu bằng 0).');
+                }
+            }
 
-      const emailField = document.getElementById('email');
-      if (emailField && emailField.value.trim() !== '') {
-          const emailValue = emailField.value.trim();
-          if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailValue)) {
-              allFilled = false;
-              emailField.classList.add('border-red-500');
-              errorMessages.push('Email không hợp lệ.');
-          }
-      }
+            const emailField = document.getElementById('email');
+            if (emailField && emailField.value.trim() !== '') {
+                const emailValue = emailField.value.trim();
+                if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailValue)) {
+                    allFilled = false;
+                    emailField.classList.add('border-red-500');
+                    errorMessages.push('Email không hợp lệ.');
+                }
+            }
 
-      const agreeField = document.getElementById('agree');
-      if (!agreeField.checked) {
-          allFilled = false;
-          errorMessages.push('Vui lòng đồng ý với điều khoản và điều kiện.');
-      }
-      if (!allFilled) {
-          alert(errorMessages.join('\n'));
-          return;
-      }
+            const agreeField = document.getElementById('agree');
+            if (!agreeField.checked) {
+                allFilled = false;
+                errorMessages.push('Vui lòng đồng ý với điều khoản và điều kiện.');
+            }
+            if (!allFilled) {
+                alert(errorMessages.join('\n'));
+                return;
+            }
 
-      localStorage.setItem('lastOrderInfo', JSON.stringify(userInfo));
- const cartItems = JSON.parse(localStorage.getItem('selectedItemsForCheckout')) || [];
-      const maKH = <?php echo json_encode($makh); ?>;
-      const tongTien = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
-      const shippingFeeLater = calculateShippingFee('vn', Number(userInfo.city), Number(userInfo.district));
-      const isImmediate = document.getElementById('shipping-now').checked;
-  const shippingFeeValue = isImmediate
-      ? 200000
-      : calculateShippingFee('vn', Number(userInfo.city), Number(userInfo.district));
-  const tongTienCuoi = tongTien + shippingFeeValue;
-
- 
-
-      const orderData = {
-          makh: maKH,
-          sdt: userInfo.phone,
-          diachi: userInfo.address,
-          ghichu: document.getElementById('order-note').value.trim() || '',
-          tongtien: tongTienCuoi,
-          phivanchuyen: shippingFeeValue,
-          cart: cartItems
-      };
-
-      console.log('Dữ liệu gửi đi:', orderData);
-
-      fetch(window.location.href, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: 'orderData=' + encodeURIComponent(JSON.stringify(orderData))
-      })
-      .then(res => {
-          console.log('Mã trạng thái:', res.status);
-          if (!res.ok) {
-              return res.text().then(text => {
-                  throw new Error(`HTTP error! Status: ${res.status}, Response: ${text}`);
-              });
-          }
-          return res.json();
-      })
-      .then(data => {
-          console.log('Phản hồi từ server:', data);
-          if (data.success) {
-              alert('Đặt hàng thành công! Mã hóa đơn: ' + data.mahd);
-
-              // Lấy danh sách sản phẩm trong giỏ hàng hiện tại từ localStorage
-            let currentCart = getCartItems();
-
-  // Cập nhật số lượng sau khi đặt hàng
-  orderData.cart.forEach(orderedItem => {
-      const index = currentCart.findIndex(item => item.id === orderedItem.id);
-      if (index !== -1) {
-          // Trừ số lượng sản phẩm đã đặt
-          currentCart[index].quantity -= orderedItem.quantity;
-
-          // Nếu số lượng còn lại <= 0, xóa khỏi giỏ
-          if (currentCart[index].quantity <= 0) {
-              currentCart.splice(index, 1);
-          }
-      }
-  });
-
-  // Lưu lại giỏ hàng đã cập nhật
-  if (currentCart.length > 0) {
-      localStorage.setItem('cart', JSON.stringify(currentCart));
-  } else {
-      localStorage.removeItem('cart');
-  }
+            localStorage.setItem('lastOrderInfo', JSON.stringify(userInfo));
+            const cartItems = JSON.parse(localStorage.getItem('selectedItemsForCheckout')) || [];
+            const maKH = <?php echo json_encode($makh); ?>;
+            const tongTien = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+            const shippingFeeLater = calculateShippingFee('vn', Number(userInfo.city), Number(userInfo.district));
+            const isImmediate = document.getElementById('shipping-now').checked;
+            const shippingFeeValue = isImmediate ?
+                200000 :
+                calculateShippingFee('vn', Number(userInfo.city), Number(userInfo.district));
+            const tongTienCuoi = tongTien + shippingFeeValue;
 
 
-              // Cập nhật giao diện giỏ hàng
-              renderCart();
 
-              // Chuyển hướng sau khi đặt hàng
-              window.location.href = '/wordpress/Oder';
-          } else {
-              alert('Đặt hàng thất bại: ' + (data.message || 'Lỗi không xác định'));
-          }
-      })
-      .catch(err => {
-          console.error('Lỗi khi gửi đơn hàng:', err);
-          alert('Đã xảy ra lỗi khi đặt hàng: ' + err.message);
-      });
-  });
+            const orderData = {
+                makh: maKH,
+                sdt: userInfo.phone,
+                diachi: userInfo.address,
+                ghichu: document.getElementById('order-note').value.trim() || '',
+                tongtien: tongTienCuoi,
+                phivanchuyen: shippingFeeValue,
+                cart: cartItems
+            };
+
+            console.log('Dữ liệu gửi đi:', orderData);
+
+            fetch(window.location.href, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'orderData=' + encodeURIComponent(JSON.stringify(orderData))
+                })
+                .then(res => {
+                    console.log('Mã trạng thái:', res.status);
+                    if (!res.ok) {
+                        return res.text().then(text => {
+                            throw new Error(`HTTP error! Status: ${res.status}, Response: ${text}`);
+                        });
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('Phản hồi từ server:', data);
+                    if (data.success) {
+                        alert('Đặt hàng thành công! Mã hóa đơn: ' + data.mahd);
+
+                        // Lấy danh sách sản phẩm trong giỏ hàng hiện tại từ localStorage
+                        let currentCart = getCartItems();
+
+                        // Cập nhật số lượng sau khi đặt hàng
+                        orderData.cart.forEach(orderedItem => {
+                            const index = currentCart.findIndex(item => item.id === orderedItem.id);
+                            if (index !== -1) {
+                                // Trừ số lượng sản phẩm đã đặt
+                                currentCart[index].quantity -= orderedItem.quantity;
+
+                                // Nếu số lượng còn lại <= 0, xóa khỏi giỏ
+                                if (currentCart[index].quantity <= 0) {
+                                    currentCart.splice(index, 1);
+                                }
+                            }
+                        });
+
+                        // Lưu lại giỏ hàng đã cập nhật
+                        if (currentCart.length > 0) {
+                            localStorage.setItem('cart', JSON.stringify(currentCart));
+                        } else {
+                            localStorage.removeItem('cart');
+                        }
+
+
+                        // Cập nhật giao diện giỏ hàng
+                        renderCart();
+
+                        // Chuyển hướng sau khi đặt hàng
+                        window.location.href = '/wordpress/Oder';
+                    } else {
+                        alert('Đặt hàng thất bại: ' + (data.message || 'Lỗi không xác định'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Lỗi khi gửi đơn hàng:', err);
+                    alert('Đã xảy ra lỗi khi đặt hàng: ' + err.message);
+                });
+        });
 
         function getFieldName(id) {
             const map = {
@@ -628,5 +649,5 @@ document.getElementById('shipping-later').addEventListener('change', updateShipp
         });
     </script>
 </body>
-</html>
 
+</html>
